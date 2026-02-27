@@ -59,7 +59,7 @@ export default function Options(props) {
     }
 
     function handleCheckout() {
-        localStorage.setItem("pizza", JSON.stringify({ base, sauce, cheese, toppings }));
+        localStorage.setItem("pizza", JSON.stringify({ Base:base, Sauce:sauce, Cheese:cheese, Toppings:toppings }));
         router.push('/cart');
     }
 
