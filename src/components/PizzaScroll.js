@@ -30,29 +30,14 @@ export default function PizzaScrollAnimation() {
 
     // 🥇 Load first 10 frames immediately
     const preloadInitial = async () => {
-      for (let i = 0; i < 10; i++) {
-        images[i] = await loadImage(i);
-      }
+      const allPromises = Array.from({ length: frameCount }, (_, i) => loadImage(i));
+      const loaded = await Promise.all(allPromises);
+      loaded.forEach((img, i) => { images[i] = img; });
       context.drawImage(images[0], 0, 0);
       setTimeout(() => setLoading(false), 300);
       startAnimation();
-      preloadInBatches(10);
     };
 
-    const preloadInBatches = async (startIndex) => {
-      const batchSize = 12;
-      for (let i = startIndex; i < frameCount; i += batchSize) {
-        const batch = [];
-        for (let j = i; j < i + batchSize && j < frameCount; j++) {
-          batch.push(loadImage(j));
-        }
-        const loaded = await Promise.all(batch);
-        loaded.forEach((img, idx) => {
-          images[i + idx] = img;
-        });
-        await new Promise((r) => setTimeout(r, 50));
-      }
-    };
 
     const startAnimation = () => {
       gsap.to(imageSeq, {
